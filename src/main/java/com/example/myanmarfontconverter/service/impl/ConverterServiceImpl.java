@@ -20,7 +20,7 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@Autowired
 	CommonDao dao;
-	
+
 	@Value("${database.name}")
 	String databaseName;
 
@@ -80,11 +80,11 @@ public class ConverterServiceImpl implements ConverterService {
 		List<ResultDto> resultList = new ArrayList<ResultDto>();
 		ResultDto resultDto = new ResultDto();
 		for (Object itemObj : currentList) {
-			
+
 			if (itemObj instanceof Number) {
 				continue;
 			}
-			
+
 			String item = (String) itemObj;
 
 			resultDto.setCurrentItem(item);

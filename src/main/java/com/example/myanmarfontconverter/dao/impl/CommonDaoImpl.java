@@ -123,7 +123,7 @@ public class CommonDaoImpl implements CommonDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public boolean executeSqlUpdate(String sql, Map<String, Object> params) throws Exception {
 		Session session = getSession();
@@ -131,10 +131,10 @@ public class CommonDaoImpl implements CommonDao {
 		java.util.Iterator<String> newIterator = params.keySet().iterator();
 		while (newIterator.hasNext()) {
 			String key = newIterator.next();
-			if(params.get(key) instanceof java.util.List){
+			if (params.get(key) instanceof java.util.List) {
 				query.setParameterList(key, (List<?>) params.get(key));
-			}else{
-			    query.setParameter(key, params.get(key));
+			} else {
+				query.setParameter(key, params.get(key));
 			}
 		}
 

@@ -18,15 +18,15 @@ import com.example.myanmarfontconverter.service.ConverterService;
 
 @Controller
 public class ConverterController {
-	
+
 	@Autowired
 	ConverterService service;
-	
+
 	@RequestMapping(value = "/")
 	public String index() {
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/converter")
 	public String converter(Model model) {
 		List<String> tableList = service.getAllTableNames();
@@ -34,28 +34,28 @@ public class ConverterController {
 		model.addAttribute("converterDto", new ConverterDto());
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/converter", method = RequestMethod.POST)
-	public String converterBy(Model model, @Valid @ModelAttribute ConverterDto dto,  BindingResult bindingResult) {
-		
+	public String converterBy(Model model, @Valid @ModelAttribute ConverterDto dto, BindingResult bindingResult) {
+
 		List<String> tableList = service.getAllTableNames();
 		model.addAttribute("tableList", tableList);
-		
-	    if (bindingResult.hasErrors()) {
-	        return "index";
-	    }
+
+		if (bindingResult.hasErrors()) {
+			return "index";
+		}
 
 		List<String> itemList = service.getItems(dto.getTableName(), dto.getColumnName());
-		
+
 		List<ResultDto> newItemList = service.detectAndConvertUnicode(itemList);
-		if (newItemList != null && newItemList.size()>0) {
+		if (newItemList != null && newItemList.size() > 0) {
 			model.addAttribute("newList", newItemList);
 		}
-		
+
 		model.addAttribute("selectedTable", dto.getTableName());
 		model.addAttribute("selectedColumn", dto.getColumnName());
 		model.addAttribute("converterDto", new ConverterDto());
-		
+
 		return "index";
 	}
 }

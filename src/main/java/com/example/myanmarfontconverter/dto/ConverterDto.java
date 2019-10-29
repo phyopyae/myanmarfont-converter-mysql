@@ -6,10 +6,10 @@ public class ConverterDto {
 
 	@NotBlank
 	String tableName;
-	
+
 	@NotBlank
 	String columnName;
-	
+
 	public String getTableName() {
 		return tableName;
 	}

@@ -16,3 +16,8 @@ Using
 - database.user= username of MySQL
 - database.password= password of MySQL
 - database.name= database schema name
+
+
+### Remark
+
+This repository is not finished testing yet. There may be a lot of bugs or issues.

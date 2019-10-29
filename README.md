@@ -1,4 +1,4 @@
-"# myanmarfont-converter-mysql" 
+## Description
 
 This is a SpringBoot application which is to convert all Zawgyi texts from MySQL to Myanmar Unicode by selecting database table and column.
 

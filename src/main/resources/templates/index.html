@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1" />
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<title>Spring Boot Application</title>
+</head>
+<script>
+$(document).ready(function() {
+    $('select.changeTable').change(function(){
+        $.ajax({
+                type: 'POST',
+                contentType: "application/json",
+                url: '/api/selectTable', 
+                data: $('select.changeTable').val(),
+                dataType: 'json',
+                success: function (data) {
+
+                    var formoption = "";
+                    $.each(data, function(v) {
+                      var val = data[v]
+                      formoption += "<option value='" + val + "'>" + val + "</option>";
+                    });
+                    $('#changeColumn').html(formoption);
+                },
+         });
+    });
+});
+
+function doConvert (){
+
+	var table = $('#selectedTable').val();
+	var column = $('#selectedColumn').val();
+	var data = {
+			"table" : table,
+			"column" : column
+			}
+	
+    $.ajax({
+        type: 'POST',
+        contentType: "application/json",
+        url: '/api/convertAll', 
+        data: JSON.stringify(data),
+        dataType: 'json',
+        success: function (data) {
+
+            var temp = data;
+        },
+	});
+};
+</script>
+<div th:include="common/header :: header-operator"></div>
+<body>
+
+	<div class="container">
+
+		<form action="#" th:action="@{/converter}" th:object="${converterDto}"
+			method="post">
+			<div class="form-group">
+				<h4>Available Table</h4>
+				<select class="form-control changeTable" name="changeTable"
+					th:field="*{tableName}">
+					<option value="">--</option>
+					<option th:each="table : ${tableList}" th:value="${table}"
+						th:utext="${table}" />
+				</select> <br>
+				<h4>Available Column</h4>
+				<select class="form-control" id="changeColumn" name="changeColumn"
+					th:field="*{columnName}">
+					<option value="">--</option>
+				</select> <br>
+				<div class="form-group">
+					<input class="btn btn-info" name="submit" type="submit"
+						value="Search" />
+				</div>
+		</form>
+	</div>
+	<hr>
+	<br>
+	<div class="container" th:switch="${newList}">
+		<h2 th:case="null">No data yet!</h2>
+		<div th:case="*">
+		<input id="selectedTable" type="hidden" th:value="${selectedTable}" />
+		<input id="selectedColumn" type="hidden" th:value="${selectedColumn}" />
+			<h2>
+				Result of "<span th:text="${selectedTable}">Test</span>" table and "<span
+					th:text="${selectedColumn}">Test</span>" column.
+			</h2>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>Current Item</th>
+						<th>Score</th>
+						<th>Converted Item</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${newList}">
+						<td th:text="${itemStat.index}+1"></td>
+						<td th:text="${item.currentItem}"></td>
+						<td th:text="${item.scoreZ}"></td>
+						<td th:text="${item.convertedItem}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="form-group">
+				<input class="btn btn-info" name="submit" type="submit" value="Convert ALL"
+					onclick="doConvert()" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>

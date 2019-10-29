@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1" />
+<title>Insert title here</title>
+</head>
+<div th:fragment="header-operator">
+<style>
+ul {
+	font: 15px Helvetica;
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	background-color: #F8F8F8;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	background-color: #E8E8E8;
+}
+</style>
+	<body>
+		<ul>
+			<li><a style="font: 30px">MM Font Converter</a></li>
+			<li><a href="/admin/registereduserlist">Home</a></li>
+			<li><a href="/admin/userlist">Log</a></li>
+			<li style="float: right"><a>Log Out</a></li>
+		</ul>
+	</body>
+</div>
+</html>

@@ -10,3 +10,9 @@ Using
 - Thymeleaf
 - MySQL
 - JDBC
+
+## Database Setting
+
+database.user=<username of MySQL>
+database.password=<password of MySQL>
+database.name=<database schema name>

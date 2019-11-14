@@ -78,9 +78,10 @@ public class ConverterServiceImpl implements ConverterService {
 	@Override
 	public List<ResultDto> detectAndConvertUnicode(List<String> currentList) {
 		List<ResultDto> resultList = new ArrayList<ResultDto>();
-		ResultDto resultDto = new ResultDto();
+		
 		for (Object itemObj : currentList) {
 
+			ResultDto resultDto = new ResultDto();
 			if (itemObj instanceof Number) {
 				continue;
 			}

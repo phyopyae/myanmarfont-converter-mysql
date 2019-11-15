@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.myanmarfontconverter.dao.CommonDao;
+import com.example.myanmarfontconverter.dto.ConfigDto;
 import com.example.myanmarfontconverter.dto.ResultDto;
+import com.example.myanmarfontconverter.service.ConfigService;
 import com.example.myanmarfontconverter.service.ConverterService;
 import com.google.myanmartools.TransliterateZ2U;
 import com.google.myanmartools.ZawgyiDetector;
@@ -23,6 +25,9 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@Value("${database.name}")
 	String databaseName;
+	
+	@Autowired
+	ConfigService configService;
 
 	private static final ZawgyiDetector DETECTOR = new ZawgyiDetector();
 
@@ -30,10 +35,11 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> getAllTableNames() {
+	public List<String> getAllTableNames(ConfigDto config) {
+		
 		String sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA=:dbName ";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("dbName", databaseName);
+		params.put("dbName", config.getDatabaseName());
 		try {
 			List<String> tableNameList = (List<String>) dao.executeSqlQuery(sql, params);
 			return tableNameList;
@@ -45,11 +51,11 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> getAllColumnNames(String tableName) {
+	public List<String> getAllColumnNames(String tableName, ConfigDto config) {
 		String sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` "
 				+ "WHERE `TABLE_SCHEMA`=:dbName AND `TABLE_NAME`=:colName";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("dbName", databaseName);
+		params.put("dbName", config.getDatabaseName());
 		params.put("colName", tableName);
 		try {
 			List<String> columnsList = (List<String>) dao.executeSqlQuery(sql, params);
@@ -62,8 +68,8 @@ public class ConverterServiceImpl implements ConverterService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> getItems(String tableName, String columnName) {
-		String dbTableName = databaseName + "." + tableName;
+	public List<String> getItems(String tableName, String columnName, ConfigDto config) {
+		String dbTableName = config.getDatabaseName() + "." + tableName;
 		String sql = "SELECT " + columnName + " FROM " + dbTableName + " WHERE " + columnName + " IS NOT NULL AND "
 				+ columnName + " <> ''";
 		try {
@@ -105,9 +111,9 @@ public class ConverterServiceImpl implements ConverterService {
 	}
 
 	@Override
-	public String convertAll(List<ResultDto> newItemList, String tableName, String columnName) {
+	public String convertAll(List<ResultDto> newItemList, String tableName, String columnName, ConfigDto config) {
 		boolean hasError = false;
-		String dbTableName = databaseName + "." + tableName;
+		String dbTableName = config.getDatabaseName() + "." + tableName;
 		for (ResultDto item : newItemList) {
 			String convertSql = "UPDATE " + dbTableName + " SET " + columnName + "=:newColumnItem WHERE " + columnName
 					+ "=:oldColumnItem";
